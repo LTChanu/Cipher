@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "219406828368",
+    "project_id": "cipher-3ad2a",
+    "storage_bucket": "cipher-3ad2a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219406828368:android:ae095cd64a45475a886255",
+        "android_client_info": {
+          "package_name": "com.home.cipher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219406828368-v7d75mu9uldi140fi3t58qg21kl1vrvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDupx1ZEGRlaRDgpcaQljTCwIYEu_Q83Go"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219406828368-v7d75mu9uldi140fi3t58qg21kl1vrvg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

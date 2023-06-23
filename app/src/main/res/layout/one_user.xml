@@ -1,0 +1,20 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#BB000000"
+    android:id="@+id/one_user">
+
+    <CheckBox
+        android:id="@+id/my_checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="@string/check_me"
+        android:textSize="18sp"
+        tools:ignore="TouchTargetSizeCheck,VisualLintButtonSize" />
+
+
+</LinearLayout>

@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Cipher</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="addtask">addtask</string>
+    <string name="threedots">threedots</string>
+    <string name="child_art">child_art</string>
+    <string name="management_and_connect">Management and Connect</string>
+    <string name="start">start</string>
+    <string name="add_task">Add Task</string>
+    <string name="add_group">Add Group</string>
+    <string name="add_ciph">Add Ciph</string>
+    <string name="create_group">Create Group</string>
+    <string name="login_art">login_art</string>
+    <string name="log_in">LOG IN</string>
+    <string name="you_can_use_google_login">You can use Google login</string>
+    <string name="email">Email</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="change_name">Change Name</string>
+    <string name="hint">hint</string>
+    <string name="title">Title</string>
+    <string name="statement">Statement</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="sign_in">Sign In</string>
+    <string name="name">Name</string>
+    <string name="enter_new_name_here">Enter new Name here</string>
+    <string name="enter_group_name_here">Enter group name here</string>
+    <string name="check_me">Check me</string>
+    <string name="leave_group">Leave Group</string>
+    <string name="add_meeting">Add Meeting</string>
+    <string name="leave_from_group">Leave From Group</string>
+    <string name="enter_task_name">Enter task name</string>
+    <string name="enter_description">Enter description</string>
+    <string name="select_deadline_or_start_day_and_time">Select Deadline or Start Day&amp;Time</string>
+    <string name="select_notify_date_and_time">Select notify date&amp;time</string>
+    <string name="select_group">Select Group</string>
+    <string name="calender">calender</string>
+</resources>

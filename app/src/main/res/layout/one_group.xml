@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#BB000000"
+    android:id="@+id/one_group">
+
+    <TextView
+        android:id="@+id/my_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/add_group"
+        android:textSize="18sp"
+        tools:ignore="TouchTargetSizeCheck" />
+
+
+</LinearLayout>
