@@ -42,7 +42,7 @@ public class LeaveGroup extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     parentContainer.removeAllViews();
                     for (DataSnapshot snap : snapshot.getChildren()){
-                        if(snap.child(common.rDBEmail).exists())
+                        if(snap.child("user/"+common.rDBEmail).exists())
                             loadGroup(String.valueOf(snap.getKey()));
                     }
                     common.stopLoading();
@@ -70,7 +70,7 @@ public class LeaveGroup extends AppCompatActivity {
                     if (common.isNetworkConnected(LeaveGroup.this)) {
                         DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
                         FirebaseApp.initializeApp(LeaveGroup.this);
-                        Data.child("group/" + groupName + "/" + name).removeValue().addOnSuccessListener(unused -> {
+                        Data.child("group/" + groupName + "/user/" + name).removeValue().addOnSuccessListener(unused -> {
                             common.stopLoading();
                             Toast.makeText(LeaveGroup.this, "Successfully leaved from "+groupName, Toast.LENGTH_SHORT).show();
                         }).addOnFailureListener(e -> {

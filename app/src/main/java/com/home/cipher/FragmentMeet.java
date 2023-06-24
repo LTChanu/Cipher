@@ -1,64 +1,151 @@
 package com.home.cipher;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentMeet#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class FragmentMeet extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    @SuppressLint("StaticFieldLeak")
+    private static Context context;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    //My attribute
+    private LinearLayout parentLayout;
+    private static LayoutInflater inflater;
+    private final ArrayList<String> dataKey = new ArrayList<>();
     public FragmentMeet() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentMeet.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentMeet newInstance(String param1, String param2) {
-        FragmentMeet fragment = new FragmentMeet();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_meet, container, false);
+        View view = inflater.inflate(R.layout.fragment_meet, container, false);
+
+        parentLayout = view.findViewById(R.id.meet_view);
+        FragmentMeet.inflater = inflater;
+
+        loadData();
+
+        return view;
+    }
+
+    private void loadData() {
+        ArrayList<String> dataName = new ArrayList<>();
+
+        FirebaseApp.initializeApp(context);
+        DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
+
+        Data.child("meet").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dataKey.clear();
+                dataName.clear();
+                clearViewChild();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    // Get the value of each child in the node
+                    if(String.valueOf(snapshot.child("user/"+common.rDBEmail).getValue()).equals("upcoming")) {
+                        dataName.add(Objects.requireNonNull(snapshot.child("name").getValue()).toString());
+                        dataKey.add(snapshot.getKey());
+                    }
+                }
+                for (int i = 0; i < dataKey.size(); i++) {
+                    try {
+                        addData(dataKey.get(i),dataName.get(i), i);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void addData(String key, String name, int id) throws ParseException {
+        // Inflate the custom layout XML file for the clickable element
+        View clickableElement = inflater.inflate(R.layout.one_task, parentLayout, false);
+
+        // Find the image view and text view in the clickable element
+        TextView nameTextView = clickableElement.findViewById(R.id.task_name);
+        TextView dayTextView = clickableElement.findViewById(R.id.task_date);
+        TextView timeTextView = clickableElement.findViewById(R.id.task_time);
+        String[] dayTime = common.convertToDayTime(key);
+        LinearLayout clickMe = clickableElement.findViewById(R.id.click_me);
+        // Set the image resource ID and person's name for the clickable element
+        nameTextView.setText(name);
+        nameTextView.setId(id);
+        dayTextView.setText(dayTime[0]);
+        timeTextView.setText(dayTime[1]);
+
+        int dateState = common.checkDate(dayTime[0]);
+        switch (dateState){
+            case 1:
+                clickableElement.setBackgroundColor(Color.argb(130, 255, 165, 0));
+                break;
+            case 2:
+                clickableElement.setBackgroundColor(Color.argb(130, 0, 0, 255));
+                break;
+            case 0:
+                clickableElement.setBackgroundColor(Color.argb(130, 255, 0, 0));
+                break;
+            default:
+                clickableElement.setBackgroundColor(Color.argb(130, 255, 255, 255));
+                break;
+        }
+
+        // Set an onClickListener for the clickable element
+        clickMe.setOnClickListener(v -> {
+            // Handle the click event here
+            int dataID = nameTextView.getId();
+            common.dataID = dataKey.get(dataID);
+            context.startActivity(new Intent(context, MeetData.class));
+        });
+
+        // Add the clickable element to the parent layout
+        parentLayout.addView(clickableElement);
+    }
+
+    private void clearViewChild() {
+        // Remove all views from the parent layout
+        parentLayout.removeAllViews();
+    }
+
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        FragmentMeet.context = context;
     }
 }

@@ -43,7 +43,7 @@ public class AddGroup extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     parentContainer.removeAllViews();
                     for (DataSnapshot snap : snapshot.getChildren()){
-                        if(!snap.child(common.rDBEmail).exists())
+                        if(!snap.child("user/"+common.rDBEmail).exists() && String.valueOf(snap.child("type").getValue()).equals("public"))
                             loadGroup(String.valueOf(snap.getKey()));
                     }
                     common.stopLoading();
@@ -71,7 +71,7 @@ public class AddGroup extends AppCompatActivity {
                     if (common.isNetworkConnected(AddGroup.this)) {
                         DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
                         FirebaseApp.initializeApp(AddGroup.this);
-                        Data.child("group/" + groupName + "/" + name).setValue(name).addOnSuccessListener(unused -> {
+                        Data.child("group/" + groupName + "/user/" + name).setValue(name).addOnSuccessListener(unused -> {
                             common.stopLoading();
                             Toast.makeText(AddGroup.this, "Successfully added to "+groupName, Toast.LENGTH_SHORT).show();
                         }).addOnFailureListener(e -> {

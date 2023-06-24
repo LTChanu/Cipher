@@ -69,11 +69,13 @@ public class AddTask extends AppCompatActivity {
 
                     int i = 0;
                     for (DataSnapshot snap : snapshot.getChildren()) {
-                        list[i] = false;
-                        String em = String.valueOf(snap.getKey());
-                        mail[i] = em;
-                        loadOne(em, i);
-                        i++;
+                        if(snap.child("user/"+common.rDBEmail).exists()) {
+                            list[i] = false;
+                            String em = String.valueOf(snap.getKey());
+                            mail[i] = em;
+                            loadOne(em, i);
+                            i++;
+                        }
                     }
                     common.stopLoading();
                 }
@@ -192,7 +194,7 @@ public class AddTask extends AppCompatActivity {
         stringDeadline = Objects.requireNonNull(deadline.getText()).toString();
         stringNotify = Objects.requireNonNull(notify.getText()).toString();
 
-        if(stringName == null || stringDescription.equals(null) || stringDeadline.equals(null) || stringNotify.equals(null)){
+        if(stringName.equals("") || stringDeadline.equals("") || stringNotify.equals("")){
             Toast.makeText(this, "Fill All details.", Toast.LENGTH_LONG).show();
         }else {
             boolean[] isRun = {true};
@@ -238,7 +240,8 @@ public class AddTask extends AppCompatActivity {
             FirebaseApp.initializeApp(this);
 
             Data.child("task/" + id + "/name").setValue(stringName);
-            Data.child("task/" + id + "/description").setValue(stringDescription);
+            if(stringDescription!=null)
+                Data.child("task/" + id + "/description").setValue(stringDescription);
             for(String user : userList){
                 Data.child("task/" + id + "/user/"+user).setValue("upcoming");
             }
@@ -264,7 +267,7 @@ public class AddTask extends AppCompatActivity {
                     if(isRun[0]) {
                         isRun[0] = false;
                         for (String group : groupList) {
-                            for (DataSnapshot snap : snapshot.child(group).getChildren()) {
+                            for (DataSnapshot snap : snapshot.child(group+"/user").getChildren()) {
                                 userList.add(String.valueOf(snap.getKey()));
                             }
                         }

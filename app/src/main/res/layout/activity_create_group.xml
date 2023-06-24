@@ -39,6 +39,15 @@
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <CheckBox
+            android:id="@+id/group_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/private_group"
+            android:textSize="18sp"
+            tools:ignore="TouchTargetSizeCheck,VisualLintButtonSize" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -60,7 +69,7 @@
             android:background="#2196F3"
             android:onClick="Add"
             android:layout_gravity="center"
-            android:text="@string/add_group"
+            android:text="@string/create_group"
             android:textColor="#212121"
             android:layout_marginTop="10dp"
             tools:ignore="UsingOnClickInXml" />

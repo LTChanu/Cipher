@@ -36,4 +36,18 @@
     <string name="select_notify_date_and_time">Select notify date&amp;time</string>
     <string name="select_group">Select Group</string>
     <string name="calender">calender</string>
+    <string name="private_group">Private Group</string>
+    <string name="enter_meeting_name">Enter meeting name</string>
+    <string name="select_start_day_time"><![CDATA[Select start Day&Time]]></string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="profile">Profile</string>
+    <string name="enter_meting_link">Enter meting link</string>
+    <string name="ciph_details">Ciph Details</string>
+    <string name="description">Description</string>
+    <string name="notify_date">Notify Date</string>
+    <string name="notify_time">Notify Time</string>
+    <string name="meeting_details">Meeting Details</string>
+    <string name="go_to_meeting">Go to Meeting</string>
+    <string name="copy">copy</string>
 </resources>
