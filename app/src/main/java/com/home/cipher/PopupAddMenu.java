@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class PopupAddMenu {
     PopupWindow popupWindow;
-    TextView addTask, addMeet, addGroup, leaveGroup, changeName, createGroup;
+    TextView addTask, addMeet, addGroup, leaveGroup, changeName, createGroup, howToUse, about, feedback;
 
 
 
@@ -26,6 +26,9 @@ public class PopupAddMenu {
         leaveGroup = popupView.findViewById(R.id.leaveGroup);
         changeName = popupView.findViewById(R.id.changeName);
         createGroup = popupView.findViewById(R.id.createGroup);
+        howToUse = popupView.findViewById(R.id.how_to_use);
+        about = popupView.findViewById(R.id.about);
+        feedback = popupView.findViewById(R.id.feedback);
 
         // Create the popup window
         popupWindow = new PopupWindow(popupView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);

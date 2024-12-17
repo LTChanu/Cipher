@@ -1,9 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/one_task"
+    android:id="@+id/one_comment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#BB000000"
+    android:background="#70000000"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -11,8 +12,6 @@
         android:id="@+id/click_me"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
         android:orientation="vertical"
         tools:ignore="UselessParent">
 
@@ -23,11 +22,11 @@
 
 
             <TextView
-                android:id="@+id/task_date"
+                android:id="@+id/comment_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="@string/date"
+                android:text="@string/name"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 tools:ignore="TouchTargetSizeCheck" />
@@ -38,7 +37,7 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/task_time"
+                android:id="@+id/comment_date_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -48,16 +47,31 @@
                 tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/task_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/name"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            tools:ignore="TouchTargetSizeCheck" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/comment_body"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/comment"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_img"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/app_icon"
+                app:civ_border_color="#FF000000"
+                tools:ignore="ImageContrastCheck" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

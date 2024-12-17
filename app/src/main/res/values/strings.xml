@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Cipher</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -50,4 +50,48 @@
     <string name="meeting_details">Meeting Details</string>
     <string name="go_to_meeting">Go to Meeting</string>
     <string name="copy">copy</string>
+    <string name="sever">Server</string>
+    <string name="no_sever">No Server</string>
+    <string name="join">Join</string>
+    <string name="enter_sever_password_here">Enter Server password here</string>
+    <string name="enter_sever_name_here">Enter Server name without Spaces</string>
+    <string name="create_sever">Create Sever</string>
+    <string name="setting">Setting</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="edit">edit</string>
+    <string name="reminder_sound">Reminder Sound</string>
+    <string name="tips">Tips</string>
+    <string name="user_img">user_img</string>
+    <string name="change_server">Change Server</string>
+    <string name="how_to_use">How To Use</string>
+    <string name="about">About</string>
+    <string name="youtube">Youtube</string>
+    <string name="feedback">Feedback</string>
+    <string name="comment">Comment</string>
+    <string name="refresh">Refresh</string>
+    <string name="enter_your_feedback">Enter your feedback</string>
+    <string name="choose_image">Choose Image</string>
+    <string name="submit">Submit</string>
+    <string name="what_s_new">What\'s new</string>
+    <string name="cipher_2_0">Cipher 2.0</string>
+    <string name="notification_and_reminder_alarm">* Notification And Reminder Alarm</string>
+    <string name="comments">* Comment</string>
+    <string name="help_tips">* Help Tips</string>
+    <string name="you_can_on_off_alarm_sound_and_tips">* You can on/off alarm sound and tips</string>
+    <string name="server_group">* Server Group</string>
+    <string name="profile_picture">* Profile Picture</string>
+    <string name="low_data_use">* Low data use</string>
+    <string name="run_in_background">* Run in background</string>
+    <string name="previse_ciph_and_meet_load_to_new_member">* Previse Ciph and Meet load to new member</string>
+    <string name="user_help_video">* User help video</string>
+    <string name="you_can_give_feedback_with_image">* You can give feedback with image</string>
+    <string name="about_section">* About section</string>
+    <string name="change_between_servers_anytime">* Change between servers anytime</string>
+    <string name="nick_name_and_profile_picture_change_via_server">* Nick name and profile picture change via server</string>
+    <string name="can_edit_ciph_after_add">* Can Edit Ciph after add</string>
+    <string name="can_edit_meet_after_add">* Can Edit Meet after add</string>
+    <string name="happy_learn_happy_work">HAPPY LEARN. HAPPY WORK.</string>
+    <string name="you_can_see_your_task_here_n_need_to_add_group_for_it_n_you_can_add_task_using_add_ciph_n_click_3_dots_or_your_profile_picture_for_it">#You Can See Your Task Here. \n#Need to add group for it. \n#You can add task using \'Add Ciph\'. \n#Click 3 dots or your profile picture for it.</string>
+    <string name="you_can_see_your_meet_here_n_need_to_add_group_for_it_n_you_can_add_meet_using_add_meet_n_click_3_dots_or_your_profile_picture_for_it">#You Can See Your Meet Here. \n#Need to add group for it. \n#You can add meet using \'Add Meet\'. \n#Click 3 dots or your profile picture for it.</string>
+    <string name="you_can_see_your_done_task_here_n_red_is_done_after_deu_n_blue_is_done_on_time">#You Can See Your Done Task Here. \n#Red is done after deu. \n#Blue is done on time.</string>
 </resources>

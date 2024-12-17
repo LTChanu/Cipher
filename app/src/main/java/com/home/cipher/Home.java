@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
@@ -12,6 +14,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Home extends AppCompatActivity implements TabLayout.OnTabSelectedListener, ViewPager.OnPageChangeListener {
 
@@ -33,7 +37,7 @@ public class Home extends AppCompatActivity implements TabLayout.OnTabSelectedLi
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Cipher");
+        toolbar.setTitle(common.server);
 
         tabLayout = findViewById(R.id.tablayout);
         tabLayout.addTab(tabLayout.newTab().setText("Ciph"));
@@ -48,6 +52,23 @@ public class Home extends AppCompatActivity implements TabLayout.OnTabSelectedLi
         tabLayout.setOnTabSelectedListener(this);
         viewPager.setOnPageChangeListener(this);
 
+        loadImage();
+
+    }
+
+    private void loadImage() {
+        if (common.snapshot.child("user/" + common.rDBEmail + "/img").exists()) {
+            CircleImageView img = findViewById(R.id.user_image);
+
+            Handler handler = new Handler(Looper.getMainLooper());
+
+            try {
+                img.setImageBitmap(common.ImageBitmap.get(common.ImageID.indexOf(common.rDBEmail)));
+            }catch (Exception e){
+                Runnable delayRunnable = this::loadImage;
+                handler.postDelayed(delayRunnable, 5000);
+            }
+        }
     }
 
     @Override
@@ -78,10 +99,12 @@ public class Home extends AppCompatActivity implements TabLayout.OnTabSelectedLi
     public void setCommon() {
         SharedVariable sharedVariable = new SharedVariable(this);
         common.rDBEmail = sharedVariable.getDBEmail();
+        common.server = sharedVariable.getServer();
     }
 
     public void option(View view) {
-        PopupAddMenu popupAddMenu = new PopupAddMenu(getLayoutInflater(),getWindow());
+        common.edit = false;
+        PopupAddMenu popupAddMenu = new PopupAddMenu(getLayoutInflater(), getWindow());
 
         // Set click listener for the OK button
         popupAddMenu.addTask.setOnClickListener(v ->
@@ -118,7 +141,22 @@ public class Home extends AppCompatActivity implements TabLayout.OnTabSelectedLi
         // Set click listener for the OK button
         popupAddMenu.changeName.setOnClickListener(v -> {
             popupAddMenu.popupWindow.dismiss();
-            startActivity(new Intent(this, ChangeName.class));
+            startActivity(new Intent(this, Setting.class));
+        });
+
+        popupAddMenu.howToUse.setOnClickListener(v -> {
+            popupAddMenu.popupWindow.dismiss();
+            startActivity(new Intent(this, HowToUse.class));
+        });
+
+        popupAddMenu.about.setOnClickListener(v -> {
+            popupAddMenu.popupWindow.dismiss();
+            startActivity(new Intent(this, About.class));
+        });
+
+        popupAddMenu.feedback.setOnClickListener(v -> {
+            popupAddMenu.popupWindow.dismiss();
+            startActivity(new Intent(this, Feedback.class));
         });
     }
 
@@ -137,11 +175,16 @@ public class Home extends AppCompatActivity implements TabLayout.OnTabSelectedLi
     public void onPageScrollStateChanged(int state) {
         int currentPage = viewPager.getCurrentItem();
         int selectedTabPosition = tabLayout.getSelectedTabPosition();
-        if(currentPage!=selectedTabPosition) {
+        if (currentPage != selectedTabPosition) {
             TabLayout.Tab desiredTab = tabLayout.getTabAt(currentPage); // Example: changing to the third tab
             if (desiredTab != null) {
                 desiredTab.select();
             }
         }
+    }
+
+    public void refresh(View view) {
+        startActivity(new Intent(this, Home.class));
+        finish();
     }
 }

@@ -14,18 +14,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class FragmentMeet extends Fragment {
+public class FragmentMeet extends Fragment implements SharedVariable.DataSnapshotListener {
 
     @SuppressLint("StaticFieldLeak")
     private static Context context;
@@ -34,6 +29,7 @@ public class FragmentMeet extends Fragment {
     private LinearLayout parentLayout;
     private static LayoutInflater inflater;
     private final ArrayList<String> dataKey = new ArrayList<>();
+
     public FragmentMeet() {
         // Required empty public constructor
     }
@@ -55,44 +51,39 @@ public class FragmentMeet extends Fragment {
 
         loadData();
 
+        if(!common.tips){
+            TextView tipsBox = view.findViewById(R.id.tips);
+            tipsBox.setVisibility(View.GONE);
+        }
+
         return view;
     }
 
     private void loadData() {
         ArrayList<String> dataName = new ArrayList<>();
 
-        FirebaseApp.initializeApp(context);
-        DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
+        DataSnapshot dataSnapshot = common.snapshot.child("meet");
+        dataKey.clear();
+        clearViewChild();
 
-        Data.child("meet").addValueEventListener(new ValueEventListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                dataKey.clear();
-                dataName.clear();
-                clearViewChild();
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    // Get the value of each child in the node
-                    if(String.valueOf(snapshot.child("user/"+common.rDBEmail).getValue()).equals("upcoming")) {
-                        dataName.add(Objects.requireNonNull(snapshot.child("name").getValue()).toString());
-                        dataKey.add(snapshot.getKey());
-                    }
-                }
-                for (int i = 0; i < dataKey.size(); i++) {
-                    try {
-                        addData(dataKey.get(i),dataName.get(i), i);
-                    } catch (ParseException e) {
-                        throw new RuntimeException(e);
-                    }
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+            // Get the value of each child in the node
+            for (DataSnapshot groupID :snapshot.child("groups").getChildren()){
+                if(String.valueOf(groupID.child(common.rDBEmail).getValue()).equals("upcoming")){
+                    dataName.add(Objects.requireNonNull(snapshot.child("name").getValue()).toString());
+                    dataKey.add(snapshot.getKey());
+                    break;//stop groupID
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+        }
+        for (int i = 0; i < dataKey.size(); i++) {
+            try {
+                addData(dataKey.get(i), dataName.get(i), i);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
             }
-        });
+        }
+        common.stopLoading();
     }
 
     private void addData(String key, String name, int id) throws ParseException {
@@ -112,26 +103,28 @@ public class FragmentMeet extends Fragment {
         timeTextView.setText(dayTime[1]);
 
         int dateState = common.checkDate(dayTime[0]);
-        switch (dateState){
+        switch (dateState) {
             case 1:
-                clickableElement.setBackgroundColor(Color.argb(130, 255, 165, 0));
+                clickableElement.setBackgroundColor(Color.argb(60, 255, 165, 0));
                 break;
             case 2:
-                clickableElement.setBackgroundColor(Color.argb(130, 0, 0, 255));
+                clickableElement.setBackgroundColor(Color.argb(60, 0, 0, 255));
                 break;
             case 0:
-                clickableElement.setBackgroundColor(Color.argb(130, 255, 0, 0));
+                clickableElement.setBackgroundColor(Color.argb(60, 255, 0, 0));
                 break;
             default:
-                clickableElement.setBackgroundColor(Color.argb(130, 255, 255, 255));
+                clickableElement.setBackgroundColor(Color.argb(60, 255, 255, 255));
                 break;
         }
 
+        //button.setVisibility(View.VISIBLE);
         // Set an onClickListener for the clickable element
         clickMe.setOnClickListener(v -> {
             // Handle the click event here
             int dataID = nameTextView.getId();
             common.dataID = dataKey.get(dataID);
+            common.fragmentNumber = 2;
             context.startActivity(new Intent(context, MeetData.class));
         });
 
@@ -147,5 +140,10 @@ public class FragmentMeet extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         FragmentMeet.context = context;
+    }
+
+    @Override
+    public void onDataSnapshotChanged(String dataSnapshot) {
+        startActivity(new Intent(context, Home.class));
     }
 }

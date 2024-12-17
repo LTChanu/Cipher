@@ -1,23 +1,21 @@
 package com.home.cipher;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-public class AddGroup extends AppCompatActivity {
+public class AddGroup extends AppCompatActivity implements SharedVariable.DataSnapshotListener {
 
     private LinearLayout parentContainer;
     private LayoutInflater inflater;
@@ -35,26 +33,16 @@ public class AddGroup extends AppCompatActivity {
         parentContainer = findViewById(R.id.group_list);
         inflater = LayoutInflater.from(this);
 
-        if (common.isNetworkConnected(this)) {
-            DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
-            FirebaseApp.initializeApp(this);
-            Data.child("group").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    parentContainer.removeAllViews();
-                    for (DataSnapshot snap : snapshot.getChildren()){
-                        if(!snap.child("user/"+common.rDBEmail).exists() && String.valueOf(snap.child("type").getValue()).equals("public"))
-                            loadGroup(String.valueOf(snap.getKey()));
-                    }
-                    common.stopLoading();
-                }
+        SharedVariable sharedVariable = new SharedVariable(this);
+        sharedVariable.addDataSnapshotListener(this);
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+        DataSnapshot snapshot = common.snapshot.child("group");
+        parentContainer.removeAllViews();
+        for (DataSnapshot snap : snapshot.getChildren()) {
+            if (!snap.child("user/" + common.rDBEmail).exists() && String.valueOf(snap.child("type").getValue()).equals("public"))
+                loadGroup(String.valueOf(snap.getKey()));
         }
+        common.stopLoading();
     }
 
     private void loadGroup(String groupName) {
@@ -71,12 +59,16 @@ public class AddGroup extends AppCompatActivity {
                     if (common.isNetworkConnected(AddGroup.this)) {
                         DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
                         FirebaseApp.initializeApp(AddGroup.this);
-                        Data.child("group/" + groupName + "/user/" + name).setValue(name).addOnSuccessListener(unused -> {
+                        addToTask(groupName);
+                        addToMeet(groupName);
+                        Data.child("server/" + common.server + "/group/" + groupName + "/user/" + name).setValue(name).addOnSuccessListener(unused -> {
                             common.stopLoading();
-                            Toast.makeText(AddGroup.this, "Successfully added to "+groupName, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddGroup.this, "Successfully added to " + groupName, Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(this, AddGroup.class));
+                            finish();
                         }).addOnFailureListener(e -> {
                             common.stopLoading();
-                            Toast.makeText(AddGroup.this, "Error: "+e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddGroup.this, "Error: " + e, Toast.LENGTH_SHORT).show();
                         });
                     }
                 })
@@ -84,5 +76,43 @@ public class AddGroup extends AppCompatActivity {
                 .show());
 
         parentContainer.addView(xmlView);
+    }
+
+    private void addToTask(String groupName) {
+        DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
+        FirebaseApp.initializeApp(this);
+        for (DataSnapshot id : common.snapshot.child("task").getChildren()) {
+            long i = Long.parseLong(String.valueOf(id.getKey()));
+            long x = Long.parseLong(common.getCDateTime());
+            if (x < i) {
+                if (id.child("groups/" + groupName).exists()) {
+                    Data.child("server/" + common.server + "/task/" + id.getKey() + "/groups/" + groupName + "/" + common.rDBEmail).setValue("upcoming");
+                }
+            }
+        }
+    }
+
+    private void addToMeet(String groupName) {
+        DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
+        FirebaseApp.initializeApp(this);
+        for (DataSnapshot id : common.snapshot.child("meet").getChildren()) {
+            long i = Long.parseLong(String.valueOf(id.getKey()));
+            long x = Long.parseLong(common.getCDateTime());
+            if (x < i) {
+                if (id.child("groups/" + groupName).exists()) {
+                    Data.child("server/" + common.server + "/meet/" + id.getKey() + "/groups/" + groupName + "/" + common.rDBEmail).setValue("upcoming");
+                }
+            }
+        }
+    }
+
+    public void onBackPressed() {
+        startActivity(new Intent(this, Home.class));
+        finish();
+    }
+
+    @Override
+    public void onDataSnapshotChanged(String dataSnapshot) {
+
     }
 }

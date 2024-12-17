@@ -7,6 +7,14 @@
     android:background="@drawable/register_background"
     tools:context=".FragmentMeet">
 
+    <TextView
+        android:id="@+id/tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="18sp"
+        android:text="@string/you_can_see_your_meet_here_n_need_to_add_group_for_it_n_you_can_add_meet_using_add_meet_n_click_3_dots_or_your_profile_picture_for_it" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

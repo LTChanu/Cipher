@@ -44,20 +44,35 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/user_image"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="15dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="option"
+        android:src="@drawable/threedots"
+        app:civ_border_color="#FF000000"
+        tools:ignore="UsingOnClickInXml,ImageContrastCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
     <ImageButton
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:paddingTop="20dp"
-        android:paddingStart="20dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="65dp"
         android:background="@null"
         android:contentDescription="@string/threedots"
-        android:onClick="option"
+        android:onClick="refresh"
+        android:paddingStart="20dp"
+        android:paddingTop="20dp"
         android:scaleType="fitXY"
-        android:src="@drawable/threedots"
+        android:src="@drawable/baseline_refresh_24"
         android:text=""
         tools:ignore="ImageContrastCheck,RtlSymmetry,UsingOnClickInXml" />
 

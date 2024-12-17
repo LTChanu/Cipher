@@ -7,6 +7,14 @@
     android:background="@drawable/register_background"
     tools:context=".FragmentDone">
 
+    <TextView
+        android:id="@+id/tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="18sp"
+        android:text="@string/you_can_see_your_done_task_here_n_red_is_done_after_deu_n_blue_is_done_on_time" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

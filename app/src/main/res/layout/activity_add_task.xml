@@ -44,11 +44,11 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/string_task_name"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="60dp"
                         android:editable="true"
                         android:hint="@string/enter_task_name"
                         android:inputType="text"
-                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                        tools:ignore="Deprecated,TextContrastCheck,VisualLintTextFieldSize" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -58,11 +58,11 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/string_task_description"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="60dp"
                         android:editable="true"
                         android:hint="@string/enter_description"
                         android:inputType="text"
-                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                        tools:ignore="Deprecated,TextContrastCheck,VisualLintTextFieldSize" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
@@ -145,7 +145,7 @@
             android:layout_height="56dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:background="#2196F3"
+            android:background="@drawable/button_style"
             android:onClick="AddCiph"
             android:text="@string/add_ciph"
             android:textColor="#212121"

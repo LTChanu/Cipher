@@ -44,11 +44,11 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/string_meet_name"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="60dp"
                         android:hint="@string/enter_meeting_name"
                         android:editable="true"
                         android:inputType="text"
-                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                        tools:ignore="Deprecated,TextContrastCheck,VisualLintTextFieldSize" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -58,11 +58,11 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/string_meet_description"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="60dp"
                         android:hint="@string/enter_description"
                         android:editable="true"
                         android:inputType="text"
-                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                        tools:ignore="Deprecated,TextContrastCheck,VisualLintTextFieldSize" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
@@ -78,7 +78,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/string_meet_start_time"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
+                            android:layout_height="60dp"
                             android:hint="@string/select_start_day_time"
                             android:editable="false"
                             tools:ignore="Deprecated,TextContrastCheck,VisualLintTextFieldSize" />
@@ -106,7 +106,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/string_meet_notify"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
+                            android:layout_height="60dp"
                             android:hint="@string/select_notify_date_and_time"
                             android:editable="false"
                             tools:ignore="Deprecated,TextContrastCheck,VisualLintTextFieldSize" />
@@ -128,7 +128,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/string_meet_link"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="60dp"
                         android:hint="@string/enter_meting_link"
                         android:inputType="textUri"
                         tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
@@ -139,7 +139,6 @@
                     android:layout_height="25dp"
                     android:layout_marginTop="30dp"
                     android:text="@string/select_group"
-                    android:editable="true"
                     android:textSize="18sp"
                     tools:ignore="TextSizeCheck,TextContrastCheck" />
 
@@ -159,7 +158,7 @@
             android:layout_height="56dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:background="#2196F3"
+            android:background="@drawable/button_style"
             android:onClick="AddMeeting"
             android:text="@string/add_meeting"
             android:textColor="#212121"

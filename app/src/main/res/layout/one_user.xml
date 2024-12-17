@@ -2,19 +2,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="16dp"
-    android:background="#BB000000"
+    android:background="#60000000"
     android:id="@+id/one_user">
 
     <CheckBox
         android:id="@+id/my_checkbox"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:checked="false"
         android:text="@string/check_me"
         android:textSize="18sp"
         tools:ignore="TouchTargetSizeCheck,VisualLintButtonSize" />
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/user_img"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/app_icon"
+        app:civ_border_color="#FF000000"/>
 
 </LinearLayout>

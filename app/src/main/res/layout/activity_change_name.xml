@@ -1,50 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/register_background"
+    android:orientation="vertical"
     android:padding="20dp"
-    tools:context=".ChangeName">
+    tools:context=".ChangeName"
+    tools:ignore="ExtraText">
+
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginBottom="30dp"
         android:text="@string/profile"
         android:textAlignment="center"
         android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.04"
         tools:ignore="TextSizeCheck" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="changeProfilePhoto"
+        android:orientation="vertical"
+        tools:ignore="UsingOnClickInXml">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/app_icon"
+            app:civ_border_color="#FF000000" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-15dp"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/edit"
+                android:src="@drawable/baseline_edit_24" />
+
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.201"
         tools:ignore="DisableBaselineAlignment">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.201">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,10 +82,6 @@
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="italic"
-                app:layout_constraintBottom_toTopOf="@+id/googleSignInButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.289"
-                app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="TextContrastCheck" />
 
             <TextView
@@ -74,25 +95,15 @@
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="italic"
-                app:layout_constraintBottom_toTopOf="@+id/googleSignInButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.289"
-                app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.201">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/name"
@@ -106,10 +117,6 @@
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="italic"
-                app:layout_constraintBottom_toTopOf="@+id/googleSignInButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.289"
-                app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="TextContrastCheck" />
 
             <TextView
@@ -124,10 +131,6 @@
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="italic"
-                app:layout_constraintBottom_toTopOf="@+id/googleSignInButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.289"
-                app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
@@ -136,17 +139,11 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/string_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.43">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:hint="@string/enter_new_name_here"
             android:inputType="textEmailAddress"
             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
@@ -156,16 +153,12 @@
         android:id="@+id/logBtn"
         android:layout_width="197dp"
         android:layout_height="56dp"
-        android:background="#2196F3"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_style"
         android:onClick="changeName"
         android:text="@string/change_name"
         android:textColor="#212121"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.60"
         tools:ignore="UsingOnClickInXml" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

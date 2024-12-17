@@ -33,7 +33,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="60dp"
                 android:hint="@string/enter_group_name_here"
                 android:inputType="textEmailAddress"
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
@@ -66,13 +66,13 @@
             android:id="@+id/logBtn"
             android:layout_width="197dp"
             android:layout_height="56dp"
-            android:background="#2196F3"
-            android:onClick="Add"
             android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_style"
+            android:onClick="Add"
             android:text="@string/create_group"
             android:textColor="#212121"
-            android:layout_marginTop="10dp"
-            tools:ignore="UsingOnClickInXml" />
+            tools:ignore="UsingOnClickInXml,DuplicateSpeakableTextCheck" />
     </LinearLayout>
 
 

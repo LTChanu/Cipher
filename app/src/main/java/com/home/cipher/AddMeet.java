@@ -1,41 +1,41 @@
 package com.home.cipher;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
-public class AddMeet extends AppCompatActivity {
+public class AddMeet extends AppCompatActivity implements SharedVariable.DataSnapshotListener {
 
     private LinearLayout parentContainer;
     private LayoutInflater inflater;
     private boolean[] list;
     private String[] mail;
-    ArrayList<String> groupList, userList;
+    private ArrayList<String> groupList, userList;
     private String key = "0";
     private TextInputEditText deadline, notify, name, description, link;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,44 +50,40 @@ public class AddMeet extends AppCompatActivity {
         description = findViewById(R.id.string_meet_description);
         link = findViewById(R.id.string_meet_link);
 
-
+        if (common.edit)
+            loadData();
         loadName();
+    }
+
+    private void loadData() {
+        deadline.setText(common.startTime);
+        notify.setText(common.notifyTime);
+        name.setText(common.taskName);
+        description.setText(common.taskDescription);
+        link.setText(common.link);
     }
 
     private void loadName() {
         parentContainer = findViewById(R.id.group_list);
         inflater = LayoutInflater.from(this);
 
-        if (common.isNetworkConnected(this)) {
-            DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
-            FirebaseApp.initializeApp(this);
-            Data.child("group").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    parentContainer.removeAllViews();
-                    int users = (int) snapshot.getChildrenCount();
-                    list = new boolean[users];
-                    mail = new String[users];
+        DataSnapshot snapshot = common.snapshot.child("group");
+        parentContainer.removeAllViews();
+        int users = (int) snapshot.getChildrenCount();
+        list = new boolean[users];
+        mail = new String[users];
 
-                    int i = 0;
-                    for (DataSnapshot snap : snapshot.getChildren()) {
-                        if(snap.child("user/"+common.rDBEmail).exists()) {
-                            list[i] = false;
-                            String em = String.valueOf(snap.getKey());
-                            mail[i] = em;
-                            loadOne(em, i);
-                            i++;
-                        }
-                    }
-                    common.stopLoading();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+        int i = 0;
+        for (DataSnapshot snap : snapshot.getChildren()) {
+            if (snap.child("user/" + common.rDBEmail).exists()) {
+                list[i] = false;
+                String em = String.valueOf(snap.getKey());
+                mail[i] = em;
+                loadOne(em, i);
+                i++;
+            }
         }
+        common.stopLoading();
     }
 
     private void loadOne(String name, int i) {
@@ -189,7 +185,7 @@ public class AddMeet extends AppCompatActivity {
     }
 
     @SuppressLint("NotConstructor")
-    public void AddMeeting(View view) throws ParseException {
+    public void AddMeeting(View view) {
         String stringDeadline, stringNotify, stringName, stringDescription, stringLink;
 
         stringName = Objects.requireNonNull(name.getText()).toString();
@@ -198,42 +194,34 @@ public class AddMeet extends AppCompatActivity {
         stringNotify = Objects.requireNonNull(notify.getText()).toString();
         stringLink = Objects.requireNonNull(link.getText()).toString();
 
-        if(stringName.equals("") || stringDeadline.equals("") || stringNotify.equals("") || stringLink.equals("")){
+        if (stringName.equals("") || stringDeadline.equals("") || stringNotify.equals("") || stringLink.equals("")) {
             Toast.makeText(this, "Fill All details.", Toast.LENGTH_LONG).show();
-        }else {
-            boolean[] isRun = {true};
+        } else {
+            Button sendBtn = findViewById(R.id.logBtn);
+            sendBtn.setEnabled(false);
             getGroups();
-            getUsers();
-            common.startLoading(this,"Creating ID");
-            userList = common.removeDuplicate(userList);
+            common.startLoading(this, "Creating ID");
             String dateID = common.convertToID(stringDeadline);
-            if (common.isNetworkConnected(this)) {
-                DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
-                FirebaseApp.initializeApp(this);
-                Data.child("meet").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(isRun[0]){
-                            isRun[0] =false;
-                            String ID;
-                            int i =10;
-                            boolean x;
-                            do{
-                                ID=dateID+i;
-                                i++;
-                                x = snapshot.child(ID).exists();
-                            }while (x);
-                            common.stopLoading();
-                            addMeet(ID,stringName,stringDescription,stringNotify,stringLink);
-                        }
-                    }
+            DataSnapshot snapshot = common.snapshot.child("meet");
+            String ID;
+            int i = 10;
+            boolean x;
+            do {
+                ID = dateID + i;
+                i++;
+                x = snapshot.child(ID).exists();
+            } while (x);
+            common.stopLoading();
+            addMeet(ID, stringName, stringDescription, stringNotify, stringLink);
+            new CountDownTimer(10000, 1000) { // 60000 milliseconds = 1 minutes
+                public void onTick(long millisUntilFinished) {
+                    // do nothing
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
+                public void onFinish() {
+                    sendBtn.setEnabled(true); // enable the button after 5 minutes
+                }
+            }.start();
         }
     }
 
@@ -243,49 +231,44 @@ public class AddMeet extends AppCompatActivity {
             DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
             FirebaseApp.initializeApp(this);
 
-            Data.child("meet/" + id + "/name").setValue(stringName);
-            Data.child("meet/" + id + "/link").setValue(stringLink);
-            if(stringDescription!=null)
-                Data.child("meet/" + id + "/description").setValue(stringDescription);
-            for(String user : userList){
-                Data.child("meet/" + id + "/user/"+user).setValue("upcoming");
+            Data.child("server/" + common.server + "/meet/" + id + "/name").setValue(stringName);
+            Data.child("server/" + common.server + "/meet/" + id + "/link").setValue(stringLink);
+            if (stringDescription != null)
+                Data.child("server/" + common.server + "/meet/" + id + "/description").setValue(stringDescription);
+            for (String group : groupList) {
+                Data.child("server/" + common.server + "/meet/" + id + "/groups/" + group + "/user").setValue("upcoming");
+                getUsers();
+                for (String user : userList) {
+                    Data.child("server/" + common.server + "/meet/" + id + "/groups/" + group + "/" + user).setValue("upcoming");
+                }
             }
-            Data.child("meet/" + id + "/notify").setValue(stringNotify).addOnSuccessListener(unused -> {
-                common.stopLoading();
-                Toast.makeText(this, "Meeting added.", Toast.LENGTH_SHORT).show();
+            Data.child("server/" + common.server + "/meet/" + id + "/create").setValue(common.getCDateTime());
+            Data.child("server/" + common.server + "/meet/" + id + "/notify/1").setValue(stringNotify).addOnSuccessListener(unused -> {
+                if (common.edit) {
+                    Data.child("server/" + common.server + "/meet/" + common.dataID).removeValue();
+                    common.dataID = id;
+                    common.stopLoading();
+                    Toast.makeText(this, "Meeting Updated.", Toast.LENGTH_SHORT).show();
+                } else {
+                    common.stopLoading();
+                    Toast.makeText(this, "Meeting added.", Toast.LENGTH_SHORT).show();
+                }
             }).addOnFailureListener(e -> {
                 common.stopLoading();
-                Toast.makeText(AddMeet.this, "Error: "+e, Toast.LENGTH_LONG).show();
+                Toast.makeText(AddMeet.this, "Error: " + e, Toast.LENGTH_LONG).show();
             });
         }
     }
 
     private void getUsers() {
-        boolean[] isRun = {true};
         userList = new ArrayList<>();
-        if (common.isNetworkConnected(this)) {
-            DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
-            FirebaseApp.initializeApp(this);
-            Data.child("group").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(isRun[0]) {
-                        isRun[0] = false;
-                        for (String group : groupList) {
-                            for (DataSnapshot snap : snapshot.child(group+"/user").getChildren()) {
-                                userList.add(String.valueOf(snap.getKey()));
-                            }
-                        }
-                        common.stopLoading();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+        DataSnapshot snapshot = common.snapshot.child("group");
+        for (String group : groupList) {
+            for (DataSnapshot snap : snapshot.child(group + "/user").getChildren()) {
+                userList.add(String.valueOf(snap.getKey()));
+            }
         }
+        common.stopLoading();
     }
 
     private void getGroups() {
@@ -294,5 +277,15 @@ public class AddMeet extends AppCompatActivity {
             if (list[i])
                 groupList.add(String.valueOf(mail[i]));
         }
+    }
+
+    public void onBackPressed() {
+        startActivity(new Intent(this, Home.class));
+        finish();
+    }
+
+    @Override
+    public void onDataSnapshotChanged(String dataSnapshot) {
+        loadName();
     }
 }

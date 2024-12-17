@@ -25,7 +25,7 @@
     <EditText
         android:id="@+id/string_text"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:hint="@string/hint"
         tools:ignore="VisualLintTextFieldSize"
         android:autofillHints=""

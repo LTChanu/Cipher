@@ -36,7 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
-public class SignIn extends AppCompatActivity {
+public class SignIn extends AppCompatActivity implements SharedVariable.DataSnapshotListener {
 
     private GoogleSignInClient client;
     private TextInputLayout email;
@@ -68,7 +68,7 @@ public class SignIn extends AppCompatActivity {
             common.startLoading(this, "Sending OTP");
             String dbEmail = stringEmail.replaceAll("[.$\\[\\]#/\\\\]", "");
             String genOTP = common.generateOTP();
-            String body = "Dear " + common.rName + ", \n\nWelcome to Cipher. \n\nYour Login OTP is " + genOTP + ".\n\n If didn't you request this, Please ignore this massage";
+            String body = "Dear Friend, \n\nWelcome to Cipher. \n\nYour Login OTP is " + genOTP + ".\n\n If didn't you request this, Please ignore this massage";
             sendEmail se = new sendEmail(stringEmail, "Cipher Registration OTP", body);
             boolean isSent = se.getIsSent();
             common.stopLoading();
@@ -143,9 +143,6 @@ public class SignIn extends AppCompatActivity {
                             String dbEmail = email.replaceAll("[.$\\[\\]#/\\\\]", "");
 
                             CheckRegister(dbEmail, name);
-
-                            Intent intent = new Intent(getApplicationContext(), Home.class);
-                            startActivity(intent);
                         } else {
                             Toast.makeText(SignIn.this, Objects.requireNonNull(task1.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -168,60 +165,64 @@ public class SignIn extends AppCompatActivity {
                 SharedVariable sharedVariable = new SharedVariable(SignIn.this);
                 sharedVariable.setWhileLogin(dbEmail, true);
                 common.stopLoading();
-                startActivity(new Intent(SignIn.this, Home.class));
+                startActivity(new Intent(SignIn.this, Sever.class));
+                finish();
             });
         }
     }
 
     private void CheckRegister(String dbEmail) {
-        if (isNetworkConnected()) {
-            common.startLoading(this, "Checking");
-            DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
-            FirebaseApp.initializeApp(this);
-            Data.child("user/" + dbEmail).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        common.stopLoading();
-                        startActivity(new Intent(SignIn.this, Home.class));
-                    } else {
-                        common.stopLoading();
-                        setName();
-                    }
+        FirebaseApp.initializeApp(this);
+        DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
+        Data.child("user/"+dbEmail).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                common.startLoading(SignIn.this, "Checking");
+                if (snapshot.exists()) {
+                    common.stopLoading();
+                    SharedVariable sharedVariable = new SharedVariable(SignIn.this);
+                    sharedVariable.setWhileLogin(dbEmail, true);
+                    startActivity(new Intent(SignIn.this, Sever.class));
+                    finish();
+                } else {
+                    common.stopLoading();
+                    setName();
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
-        }
+            }
+        });
+
 
     }
 
     private void CheckRegister(String dbEmail, String name) {
         common.startLoading(this, "Checking");
-        if (isNetworkConnected()) {
-            DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
-            FirebaseApp.initializeApp(this);
-            Data.child("user/" + dbEmail).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        common.stopLoading();
-                        startActivity(new Intent(SignIn.this, Home.class));
-                    } else {
-                        common.stopLoading();
-                        Register(dbEmail, name);
-                    }
+        FirebaseApp.initializeApp(this);
+        DatabaseReference Data = FirebaseDatabase.getInstance().getReference();
+        Data.child("user/"+dbEmail).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    common.stopLoading();
+                    SharedVariable sharedVariable = new SharedVariable(SignIn.this);
+                    sharedVariable.setWhileLogin(dbEmail, true);
+                    startActivity(new Intent(SignIn.this, Sever.class));
+                    finish();
+                } else {
+                    common.stopLoading();
+                    Register(dbEmail, name);
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
-        }
+            }
+        });
     }
 
     private void setName() {
@@ -241,5 +242,10 @@ public class SignIn extends AppCompatActivity {
         });
 
         popup1.cansel.setOnClickListener(v -> popup1.popupWindow.dismiss());
+    }
+
+    @Override
+    public void onDataSnapshotChanged(String dataSnapshot) {
+
     }
 }
